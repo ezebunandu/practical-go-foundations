@@ -3,9 +3,32 @@ package main
 import (
 	"fmt"
 	"time"
+	// "time"
 )
 
+// the worst sort algorithm in the world
+func sleepSort(values []int) []int{
+    ch := make(chan int, len(values))
+    for _, n := range values {
+        n := n
+        go func(){
+            time.Sleep(time.Duration(n) * time.Millisecond)
+            ch <- n
+        }()
+    }
+    var res []int
+    for range values {
+        n := <- ch
+        res = append(res, n)
+    }
+    close(ch)
+    return res
+}
+
 func main(){
+    vals := []int {1, 5, 7, 3, 9}
+    res := sleepSort(vals)
+    fmt.Printf("Result of sleep sort: %#v\n", res)
     go fmt.Println("goroutine")
     fmt.Println("main")
 

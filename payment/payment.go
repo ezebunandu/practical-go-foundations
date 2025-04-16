@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 type Payment struct {
@@ -13,12 +14,18 @@ type Payment struct {
 }
 
 func (p *Payment) Process() {
-    p.once.Do(p.process)
+	t := time.Now()
+	// wrap the call to p.process in an anonymous function so it can be passed
+	// to once.Do
+	// which will only accept a function that takes no parameters
+	// hence reducing the arity
+	p.once.Do(func() { p.process(t) })
 }
 
 // each payment should only be processed once
-func (p *Payment) process() {
-	fmt.Printf("%s -> %.2f -> %s\n", p.From, p.Amount, p.To)
+func (p *Payment) process(t time.Time) {
+	ts := t.Format(time.RFC3339)
+	fmt.Printf("[%s] %s -> %.2f -> %s\n", ts, p.From, p.Amount, p.To)
 }
 
 func main() {

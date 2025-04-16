@@ -3,11 +3,14 @@ package main
 import (
 	"fmt"
 	"sync"
+	"sync/atomic"
 )
 
 func main(){
+    /* // solution 1: use mutex
     var mu sync.Mutex // put the mutex on top of the variable to guard
-    count := 0
+    count := 0 */
+    var count int64
 
     const n = 10
     var wg sync.WaitGroup
@@ -16,9 +19,10 @@ func main(){
         go func ()  {
             defer wg.Done()
             for j := 0; j < 10_000; j ++ {
-                mu.Lock()
+/*                 mu.Lock()
                 count++
-                mu.Unlock()
+                mu.Unlock() */
+                atomic.AddInt64(&count, 1)
             }
         }()
     }

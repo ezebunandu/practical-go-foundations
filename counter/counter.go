@@ -6,6 +6,7 @@ import (
 )
 
 func main(){
+    var mu sync.Mutex // put the mutex on top of the variable to guard
     count := 0
 
     const n = 10
@@ -15,7 +16,9 @@ func main(){
         go func ()  {
             defer wg.Done()
             for j := 0; j < 10_000; j ++ {
+                mu.Lock()
                 count++
+                mu.Unlock()
             }
         }()
     }

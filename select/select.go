@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"time"
 )
@@ -17,12 +18,20 @@ func main(){
         time.Sleep(20 * time.Millisecond)
         ch2 <- 2
     }()
+
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Millisecond)
+    defer cancel()
+
     select {
     case val := <- ch1:
         fmt.Println("ch1:", val)
     case val := <- ch2:
         fmt.Println("ch2:", val)
+    case <- ctx.Done():
+        fmt.Println("timeout")
+/*     
     case <- time.After(5 * time.Millisecond):
         fmt.Println("timeout")
+     */
     }
 }

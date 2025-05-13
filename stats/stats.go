@@ -27,8 +27,12 @@ func ReluFloat64(i float64) float64 {
     return i
 } */
 
+type Number interface {
+    ~int | ~float64
+}
+
 // T is a "type constraint"
-func Relu[T ~int | ~float64] (i T) T {
+func Relu[T Number] (i T) T {
     if i < 0 {
         return 0
     }

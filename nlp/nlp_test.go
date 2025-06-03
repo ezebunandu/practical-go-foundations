@@ -1,6 +1,7 @@
 package nlp
 
 import (
+	"os"
 	"slices"
 	"testing"
 )
@@ -32,5 +33,20 @@ func TestTokenizeTable(t *testing.T){
                 t.Fatalf("expected %#v, got %#v", tc.tokens, tokens)
             }
         })
+    }
+}
+
+/*
+Selecting tests:
+- "run" flag: regexp
+- build tags (//go:build comment)
+- environment variables
+*/
+
+var inCI = os.Getenv("CI") != ""
+
+func TestInCI(t *testing.T){
+    if !inCI {
+        t.Skip("not in CI")
     }
 }

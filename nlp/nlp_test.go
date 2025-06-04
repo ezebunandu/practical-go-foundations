@@ -2,8 +2,9 @@ package nlp
 
 import (
 	"os"
-	"slices"
 	"testing"
+
+    "github.com/stretchr/testify/require"
 )
 
 func TestTokenize(t *testing.T) {
@@ -12,9 +13,12 @@ func TestTokenize(t *testing.T) {
     text := "A lil bit of project engineering"
     tokens := Tokenize(text)
     expected := []string{"a", "lil", "bit", "of", "project", "engineering"}
-    if !slices.Equal(tokens, expected){
+
+    require.Equal(t, expected, tokens)
+    // Before testify
+/*     if !slices.Equal(tokens, expected){
         t.Fatalf("expected %#v, got %#v", expected, tokens)
-    }
+    } */
 }
 
 func TestTokenizeTable(t *testing.T){
@@ -29,9 +33,11 @@ func TestTokenizeTable(t *testing.T){
     for _, tc := range cases {
         t.Run(tc.text, func(t *testing.T) {
             tokens := Tokenize(tc.text)
-            if !slices.Equal(tc.tokens, tokens) {
+            require.Equal(t, tc.tokens, tokens)
+            // Before testify
+            /* if !slices.Equal(tc.tokens, tokens) {
                 t.Fatalf("expected %#v, got %#v", tc.tokens, tokens)
-            }
+            } */
         })
     }
 }

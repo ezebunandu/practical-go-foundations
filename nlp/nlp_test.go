@@ -2,6 +2,7 @@ package nlp
 
 import (
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/BurntSushi/toml"
@@ -75,4 +76,16 @@ func loadTokenizeCase(t *testing.T) []tokCase {
 	require.NoError(t, err)
 	t.Logf("Loaded cases: %+v", data.Cases)
 	return data.Cases
+}
+
+func FuzzTokenizer(f *testing.F){
+    f.Add("")
+    fn := func(t *testing.T, text string) {
+        tokens := Tokenize(text)
+        lText := strings.ToLower(text)
+        for _, tok := range tokens {
+            require.Contains(t, lText, tok)
+        }
+    }
+    f.Fuzz(fn)
 }

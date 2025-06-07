@@ -1,4 +1,4 @@
-package nlp
+package nlp_test
 
 import (
 	"os"
@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/BurntSushi/toml"
+	"github.com/ardanlabs/nlp"
 
 	"github.com/stretchr/testify/require"
 )
@@ -14,7 +15,7 @@ func TestTokenize(t *testing.T) {
 	// setup : call a function
 	// teardown: defer/t.Cleanup
 	text := "A lil bit of project engineering"
-	tokens := Tokenize(text)
+	tokens := nlp.Tokenize(text)
 	expected := []string{"a", "lil", "bit", "of", "project", "engineering"}
 
 	require.Equal(t, expected, tokens)
@@ -32,7 +33,7 @@ func TestTokenizeTable(t *testing.T) {
 			name = tc.Text
 		}
 		t.Run(name, func(t *testing.T) {
-			tokens := Tokenize(tc.Text)
+			tokens := nlp.Tokenize(tc.Text)
             if tokens == nil {
                 tokens = []string{}
             }
@@ -81,7 +82,7 @@ func loadTokenizeCase(t *testing.T) []tokCase {
 func FuzzTokenizer(f *testing.F){
     f.Add("")
     fn := func(t *testing.T, text string) {
-        tokens := Tokenize(text)
+        tokens := nlp.Tokenize(text)
         lText := strings.ToLower(text)
         for _, tok := range tokens {
             require.Contains(t, lText, tok)

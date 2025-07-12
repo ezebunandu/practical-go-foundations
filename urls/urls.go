@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -21,7 +23,8 @@ func main() {
         }
         log.Printf("url: %#v, status: %d\n", url, status)
     } */
-    fanOutResult(urls)
+    // fanOutResult(urls)
+    fanOutWait(urls)
     duration := time.Since(start)
     fmt.Printf("total run duration: %v\n", duration)
 }
@@ -56,4 +59,29 @@ func urlCheck(url string) (int, error) {
     }
 
     return  resp.StatusCode, nil
+}
+
+func urlLog(url string){
+    resp, err := http.Get(url)
+    if err != nil {
+        slog.Error("urlLog", "url", url, "error", err)
+        return
+    }
+
+    slog.Info("urlLog", "url", url, "status", resp.StatusCode)
+}
+
+func fanOutWait(urls []string){
+    // fanout
+    var wg sync.WaitGroup
+    for _, url := range urls {
+        wg.Add(1)
+        go func(){
+            defer wg.Done()
+            urlLog(url)
+        }()
+    }
+    // wait for goroutines to finish
+    wg.Wait()
+     
 }

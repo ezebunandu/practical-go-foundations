@@ -24,7 +24,7 @@ func main() {
         log.Printf("url: %#v, status: %d\n", url, status)
     } */
     // fanOutResult(urls)
-    fanOutWait(urls)
+    fanOutPool(urls)
     duration := time.Since(start)
     fmt.Printf("total run duration: %v\n", duration)
 }
@@ -84,4 +84,31 @@ func fanOutWait(urls []string){
     // wait for goroutines to finish
     wg.Wait()
      
+}
+
+func fanOutPool(urls []string){
+    // fanout
+    var wg sync.WaitGroup
+    ch := make(chan string)
+    
+    // Producer
+    go func(){
+        for _, url := range urls {
+            ch <- url
+        }
+        close(ch)
+    }()
+    // Consumers
+    const size = 2 // a fixed number of goroutines in the pool
+    wg.Add(size)
+    for range size {
+    // Consumers
+        go func ()  {
+            defer wg.Done()
+            for url := range ch {
+                urlLog(url)
+            }
+        }()
+    }
+    wg.Wait()
 }

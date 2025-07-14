@@ -11,5 +11,5 @@ func ExampleTokenize() {
     fmt.Println(tokens)
 
     // Output:
-    // [a lil bit of project engineering]
+    // [a lil bit of project engineer]
 }

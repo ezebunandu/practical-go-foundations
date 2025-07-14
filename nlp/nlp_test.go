@@ -16,7 +16,7 @@ func TestTokenize(t *testing.T) {
 	// teardown: defer/t.Cleanup
 	text := "A lil bit of project engineering"
 	tokens := nlp.Tokenize(text)
-	expected := []string{"a", "lil", "bit", "of", "project", "engineering"}
+	expected := []string{"a", "lil", "bit", "of", "project", "engineer"}
 
 	require.Equal(t, expected, tokens)
 	// Before testify

@@ -1,0 +1,10 @@
+### Health
+GET http://localhost:8080/health
+
+### Tokenize
+POST http://localhost:8080/tokenize
+
+Who's on first?
+
+### Stem
+GET http://localhost:8080/stem/working
